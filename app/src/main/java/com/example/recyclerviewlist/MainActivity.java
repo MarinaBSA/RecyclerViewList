@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
+    private TypedArray sportsImageResources;
 
     private ArrayList<Sport> mSportsData = new ArrayList<>();
 
@@ -21,9 +23,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Set up data
-        initializeData();
 
         //  Find my recyclerView on the screen
         recyclerView = findViewById(R.id.recycler_view);
@@ -37,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         // Specify an adapter
         adapter = new SportAdapter(mSportsData);
         recyclerView.setAdapter(adapter);
+
+        // Set up data
+        initializeData();
     }
 
 
@@ -47,20 +49,24 @@ public class MainActivity extends AppCompatActivity {
         String[] sportsInfo = getResources().getStringArray(R.array.sports_info);
 
         // Set up data
-        TypedArray sportsImageResources =
-                getResources().obtainTypedArray(R.array.sports_images);
+         sportsImageResources = getResources().obtainTypedArray(R.array.sports_images);
 
         // Clear the existing data (to avoid duplication).
         mSportsData.clear();
 
         // Create the ArrayList of Sports objects with titles, information about each sport
         // and an image
-        for(int i=0;i<sportsList.length;i++){
+        for(int i = 0; i < sportsList.length; i++){
             mSportsData.add(new Sport(sportsList[i], sportsInfo[i], sportsImageResources.getResourceId(i, 0)));
         }
 
-
         // Notify the adapter of the change.
-        //adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+    }R
+
+    public void addNewCard(View view) {
+        Sport sport = new Sport("Test", "Testing", sportsImageResources.getResourceId(0,0));
+        mSportsData.add(sport);
+        adapter.notifyDataSetChanged();
     }
 }
